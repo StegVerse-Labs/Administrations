@@ -1,0 +1,28 @@
+contract_version: 1
+repo_id: stegverse.administrations
+repo_type: executive_terms
+scope:
+  subject: "US Federal Executive Branch"
+  timeframe: "by-term"
+modes:
+  rhetoric_action_ledger: true
+  cross_subject: true
+
+administrations_index: "administrations/index.yml"
+case_threads_root: "case_threads"
+
+free_dom:
+  enabled: true
+  mode: involvement
+
+authority:
+  governed_by: stegverse.stegcore
+
+outputs:
+  primary_records_paths:
+    - "administrations/*/records"
+    - "case_threads/*/records"
+  graph_paths:
+    - "administrations/*/freedom"
+    - "case_threads/*/freedom"
+  exports_path: "datasets/exports"
