@@ -1,0 +1,64 @@
+name: weekly-ingest-case-threads
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "25 7 * * 1" # Mondays 07:25 UTC
+
+concurrency:
+  group: weekly-ingest-case-threads
+  cancel-in-progress: false
+
+jobs:
+  ingest_case_threads:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Add cases here as you create them.
+        include:
+          - case_dir: case_threads/CASE_TEMPLATE
+            subject: "Case Thread (Template)"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps (if requirements.txt exists)
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "No requirements.txt found; skipping."
+          fi
+
+      - name: Validate case folder + URLs file
+        run: |
+          CASE_DIR="${{ matrix.case_dir }}"
+          URLS="$CASE_DIR/seeds/sources.urls.txt"
+          test -d "$CASE_DIR"
+          test -f "$URLS"
+          echo "OK: $URLS"
+
+      - name: Run ingest for case
+        env:
+          SUBJECT: ${{ matrix.subject }}
+          TOPIC_CLUSTER: general
+          URLS_FILE: ${{ matrix.case_dir }}/seeds/sources.urls.txt
+        run: |
+          bash scripts/run_ingest.sh
+
+      - name: Commit changes (case-scoped)
+        run: |
+          git config user.name "steg-bot"
+          git config user.email "steg-bot@users.noreply.github.com"
+
+          CASE_DIR="${{ matrix.case_dir }}"
+          git add "$CASE_DIR" || true
+
+          git commit -m "weekly ingest: $CASE_DIR" || echo "No changes to commit"
+          git push
