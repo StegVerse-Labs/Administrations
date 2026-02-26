@@ -1,0 +1,70 @@
+name: weekly-ingest-admins
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "10 7 * * 1" # Mondays 07:10 UTC
+
+concurrency:
+  group: weekly-ingest-admins
+  cancel-in-progress: false
+
+jobs:
+  ingest_terms:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - term_dir: administrations/2017-2021_Trump
+            subject: "Trump Administration (2017–2021)"
+          - term_dir: administrations/2021-2025_Biden
+            subject: "Biden Administration (2021–2025)"
+          - term_dir: administrations/2025-2029_Trump
+            subject: "Trump Administration (2025–2029)"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps (if requirements.txt exists)
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "No requirements.txt found; skipping."
+          fi
+
+      - name: Validate term folder + URLs file
+        run: |
+          TERM_DIR="${{ matrix.term_dir }}"
+          URLS="$TERM_DIR/seeds/sources.urls.txt"
+          echo "TERM_DIR=$TERM_DIR"
+          test -d "$TERM_DIR"
+          test -f "$URLS"
+          echo "OK: $URLS"
+          echo "--- head($URLS) ---"
+          head -n 10 "$URLS" || true
+
+      - name: Run ingest for term
+        env:
+          SUBJECT: ${{ matrix.subject }}
+          TOPIC_CLUSTER: general
+          URLS_FILE: ${{ matrix.term_dir }}/seeds/sources.urls.txt
+        run: |
+          bash scripts/run_ingest.sh
+
+      - name: Commit changes (term-scoped)
+        run: |
+          git config user.name "steg-bot"
+          git config user.email "steg-bot@users.noreply.github.com"
+
+          TERM_DIR="${{ matrix.term_dir }}"
+          git add "$TERM_DIR" || true
+
+          git commit -m "weekly ingest: $TERM_DIR" || echo "No changes to commit"
+          git push
