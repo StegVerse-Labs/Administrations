@@ -1,0 +1,17 @@
+contract_version: 1
+append_only: true
+
+record_roots:
+  - "administrations/*/records"
+  - "case_threads/*/records"
+
+record_types:
+  statement:
+    path_suffix: "statements/YYYY/"
+    required_fields: [id, speaker, date_time_utc, venue, verbatim_quote, primary_source_url, media_type, tags, claim_targets, status]
+  action:
+    path_suffix: "actions/YYYY/"
+    required_fields: [id, date, actor, policy_instrument, scope, primary_source_url, tags, impacted_populations, status]
+  link:
+    path_suffix: "links/YYYY/"
+    required_fields: [id, statement_id, action_id, relationship_type, lag_days, court_status, outcome_summary, status]
