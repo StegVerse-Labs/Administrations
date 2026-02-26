@@ -1,0 +1,155 @@
+name: ops-weekly
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "10 7 * * 1" # Mondays 07:10 UTC
+
+concurrency:
+  group: ops-weekly
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.mk.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: mk
+        name: Build dynamic matrix from seeds/sources.urls.txt
+        run: |
+          set -euo pipefail
+
+          # Discover any folder that contains seeds/sources.urls.txt under:
+          # - administrations/*
+          # - case_threads/*
+          mapfile -t urlfiles < <(find administrations case_threads -type f -path "*/seeds/sources.urls.txt" 2>/dev/null | sort || true)
+
+          if [ ${#urlfiles[@]} -eq 0 ]; then
+            echo "matrix={\"include\":[]}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Build JSON matrix: each entry runs ingest with SUBJECT + URLS_FILE
+          # SUBJECT rule:
+          # - if under administrations/<term>/..., subject = "<term>"
+          # - if under case_threads/<case>/..., subject = "Case Thread: <case>"
+          json='{"include":['
+          first=1
+          for f in "${urlfiles[@]}"; do
+            base="$(dirname "$f")"          # .../seeds
+            root="$(dirname "$base")"       # term_dir or case_dir
+
+            if [[ "$root" == administrations/* ]]; then
+              term="${root#administrations/}"
+              subject="$term"
+            elif [[ "$root" == case_threads/* ]]; then
+              caseid="${root#case_threads/}"
+              subject="Case Thread: $caseid"
+            else
+              subject="Unknown"
+            fi
+
+            if [ $first -eq 0 ]; then json+=','; fi
+            first=0
+            json+='{"root":"'${root}'","urls":"'${f}'","subject":"'${subject}'"}'
+          done
+          json+=']}'
+
+          echo "matrix=$json" >> "$GITHUB_OUTPUT"
+
+  ingest_test_report:
+    needs: discover
+    if: ${{ fromJSON(needs.discover.outputs.matrix).include != '' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps (if requirements.txt exists)
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "No requirements.txt found; skipping."
+          fi
+
+      - name: Preflight checks
+        run: |
+          set -euo pipefail
+          test -d contracts
+          test -f contracts/repo.contract.yml
+          test -f contracts/ingest.contract.yml
+          test -f "${{ matrix.urls }}"
+          echo "OK: contracts + urls file present"
+          echo "--- head urls ---"
+          head -n 10 "${{ matrix.urls }}" || true
+
+      - name: Run ingest
+        env:
+          SUBJECT: ${{ matrix.subject }}
+          TOPIC_CLUSTER: general
+          URLS_FILE: ${{ matrix.urls }}
+        run: |
+          bash scripts/run_ingest.sh
+
+      - name: Smoke test (directory expectations)
+        run: |
+          set -euo pipefail
+          ROOT="${{ matrix.root }}"
+          # Minimal expectations: thread.yml exists for case threads; index for administrations
+          if [[ "$ROOT" == case_threads/* ]]; then
+            test -f "$ROOT/thread.yml"
+          fi
+          test -f "$ROOT/seeds/sources.urls.txt"
+          echo "Smoke OK for $ROOT"
+
+      - name: Commit changes (scoped)
+        run: |
+          set -euo pipefail
+          git config user.name "steg-bot"
+          git config user.email "steg-bot@users.noreply.github.com"
+          git add "${{ matrix.root }}" || true
+          git commit -m "ops: ingest+update ${{ matrix.root }}" || echo "No changes to commit"
+          git push
+
+  ops_report:
+    needs: [discover, ingest_test_report]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate ops report
+        run: |
+          set -euo pipefail
+          mkdir -p docs
+          TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+          echo "# Ops Report (Administrations)" > docs/OPS_REPORT.md
+          echo "" >> docs/OPS_REPORT.md
+          echo "- generated_utc: $TS" >> docs/OPS_REPORT.md
+          echo "" >> docs/OPS_REPORT.md
+          echo "## Discovered ingest targets" >> docs/OPS_REPORT.md
+          echo "" >> docs/OPS_REPORT.md
+          echo '```' >> docs/OPS_REPORT.md
+          find administrations case_threads -type f -path "*/seeds/sources.urls.txt" 2>/dev/null | sort >> docs/OPS_REPORT.md || true
+          echo '```' >> docs/OPS_REPORT.md
+
+      - name: Commit ops report
+        run: |
+          set -euo pipefail
+          git config user.name "steg-bot"
+          git config user.email "steg-bot@users.noreply.github.com"
+          git add docs/OPS_REPORT.md
+          git commit -m "ops: update OPS_REPORT.md" || echo "No changes"
+          git push
