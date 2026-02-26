@@ -1,0 +1,18 @@
+contract_version: 1
+auto_generate:
+  - kind: "records"
+    paths:
+      - "administrations/{term}/records/statements/{year}/"
+      - "administrations/{term}/records/actions/{year}/"
+      - "administrations/{term}/records/links/{year}/"
+      - "case_threads/{case_id}/records/statements/{year}/"
+      - "case_threads/{case_id}/records/actions/{year}/"
+      - "case_threads/{case_id}/records/links/{year}/"
+    when: "new_evidence_detected"
+
+  - kind: "exports"
+    paths:
+      - "datasets/exports/statements.csv"
+      - "datasets/exports/actions.csv"
+      - "datasets/exports/links.csv"
+    when: "ingest_complete"
