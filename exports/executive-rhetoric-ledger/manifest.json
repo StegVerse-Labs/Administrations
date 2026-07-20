@@ -1,0 +1,28 @@
+{
+  "authority": {
+    "candidate_only": true,
+    "may_claim_truth": false,
+    "may_classify_final": false,
+    "may_promote": false,
+    "requires_ledger_review": true
+  },
+  "generated_at": "2026-07-20T14:06:30.860601Z",
+  "manifest_version": "1.0.0",
+  "producer_commit": "a96262311b199b5124c78367e8ebe372bd7c4578",
+  "producer_repository": "StegVerse-Labs/Administrations",
+  "records": [
+    {
+      "authority": {
+        "candidate_only": true,
+        "may_promote": false
+      },
+      "corrects": [],
+      "ingestion_id": "ADMINISTRATIONS-EXPORT-EO14179-ACTION-001",
+      "path": "exports/executive-rhetoric-ledger/PIT-MODERN-2025-AI-EO-14179__action_record__2025-01-23__SRC-2025-EO14179-FR-001.json",
+      "producer_commit": "pending-current-commit",
+      "record_updated_at": null,
+      "sha256": "68bcb26723fb0371ea902c9dad0696e98c4a02133d4c87002916907916e2cdaf",
+      "supersedes": []
+    }
+  ]
+}
