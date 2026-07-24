@@ -6,9 +6,9 @@
     "may_promote": false,
     "requires_ledger_review": true
   },
-  "generated_at": "2026-07-23T11:21:57.871823Z",
+  "generated_at": "2026-07-24T11:14:43.044026Z",
   "manifest_version": "1.0.0",
-  "producer_commit": "f1b72fae2170c1948109b6c0739ba7d68b9b3592",
+  "producer_commit": "b3342b4c377b90a621a705765429b54ecd3c943b",
   "producer_repository": "StegVerse-Labs/Administrations",
   "records": [
     {
