@@ -12,11 +12,10 @@
 - github_token_authority: NONE
 
 ## Claim
-- state: CLAIMED_FOR_VALIDATION
-- claimant: current repository validation lane
-- created_at: 2026-08-11T15:34:00Z
-- release_condition: deterministic populated fixture + ERL intake validation + registry promotion
-- collision_boundary: do not replace native administration records, ingest semantics, or ERL evaluation authority
+- state: COMPLETE / VALIDATION CLAIM RELEASED
+- released_at: 2026-08-11T18:05:00Z
+- release_evidence: `research/receipts/2026-08-11-populated-adapter-and-intake-validation.json`
+- collision_boundary: native administration records and ingest semantics remain separate; local search cannot acquire ERL evaluation authority
 
 ## Installed authoritative files
 - `research/README.md`
@@ -27,6 +26,7 @@
 - `research/conformance.json`
 - `data/sources/sources_whitelist.csv`
 - `scripts/search_agent.py`
+- `tests/test_research_adapter_deterministic.py`
 - upstream standard: `StegVerse-Labs/Executive_Rhetoric_Ledger/standards/multi-trajectory-research-surface.v1.md`
 - upstream transport contract: `StegVerse-Labs/Executive_Rhetoric_Ledger/contracts/research-candidate-transport.v1.md`
 
@@ -34,32 +34,23 @@
 - recurrence: REQUIRED while relevant trajectories remain OPEN/ACTIVE and can receive future evidence
 - default cadence: weekly; trajectory evidence volatility may raise/lower cadence
 - existing weekly workflows: transport/ingest, not sufficient by themselves as ERL research monitors
-- all plausible trajectories must be searched; contradictory/null/new trajectories are preserved
-- local candidates remain lead-only/context-only until ERL review
+- potentially supporting, contrary, contextual, and null candidate evidence is preserved without local conclusion promotion
 
-## Completed work
-- research surface installed at `824aa5463febf9cffe846f9d4625801bb23e9659`;
-- conformance/recurrence profile installed at `6635e03b83631eaada166643cd2923a365bf702f`;
-- candidate adapter aligned at `06c29f41dcfdc984888fd7b1694fd8239a70aa36` to emit `stegverse.erl.research_source_candidate.v1`, full repository identity, uppercase verification state, no native/evaluation mutation, destination ERL, authority effect NONE, credential authority TV/TVC, and GitHub token authority NONE;
-- empty-frontier/empty-whitelist dry-run previously returned zero requests, zero sources, zero candidates without mutation.
+## Validation evidence
+- adapter contract alignment: `06c29f41dcfdc984888fd7b1694fd8239a70aa36`
+- deterministic fixture: `404a2f29badfbb9e7fe91e28cc14b2d6380f4a31`
+- populated adapter + ERL intake receipt: `76550f45ec11281227c812f6c15d4aeeaaf08102`
+- conformance promotion: `ab89983015807d5cf2ad07077c663c335eee0f94`
 
-## Remaining work
-1. Deterministic populated fixture proving trajectory linkage, candidate emission, null receipt, and deduplication.
-2. Run emitted packet through ERL `scripts/validate_research_candidate_intake.py`.
-3. Promote registry entry to CONFORMING only after validation evidence.
-
-## Validation
-- `python scripts/search_agent.py --base . --dry-run`
-- `python <ERL>/scripts/validate_research_surface.py .`
-- `python <ERL>/scripts/validate_research_candidate_intake.py research/source_candidates.jsonl`
+Validated: ACTIVE searched, SATURATED excluded, supporting/contrary leads preserved, null result preserved, duplicate link collapsed, ERL intake PASS, native/evaluation mutation false, TV/TVC credential authority, GitHub token authority NONE, authority effect NONE.
 
 ## Integration
+- central ERL registry promotion is the remaining cross-repository integration write
 - local acquisition only; ERL remains evaluation authority
-- reviewed publication may flow to Site only after ERL review
 
 ## Completion accounting
-- developed-files: 9/9 = 100%
+- developed-files: 11/11 = 100%
 - scaffolding/stubs: 0
-- validation: 1/3
-- integration: 2/3
-- goal-activation: 78%
+- validation: 3/3
+- integration: 2/3 until central registry promotion
+- goal-activation: 95%
