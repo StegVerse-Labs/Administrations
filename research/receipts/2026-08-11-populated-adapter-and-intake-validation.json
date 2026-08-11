@@ -1,0 +1,10 @@
+{
+  "schema":"stegverse.erl.research_surface_validation_receipt.v1",
+  "repository":"StegVerse-Labs/Administrations",
+  "adapter_commit":"06c29f41dcfdc984888fd7b1694fd8239a70aa36",
+  "test_fixture_commit":"404a2f29badfbb9e7fe91e28cc14b2d6380f4a31",
+  "validation_type":"local_deterministic_contract_harness_plus_committed_reproducible_fixture",
+  "assertions":{"active_trajectory_requests":1,"saturated_trajectory_requests":0,"candidate_count":2,"receipt_count":2,"supporting_candidate_preserved":true,"contrary_candidate_preserved":true,"null_result_preserved":true,"duplicate_matching_link_collapsed":true,"candidate_intake_validator":"PASS","credential_authority":"TV/TVC","github_token_authority":"NONE","authority_effect":"NONE","native_records_mutated":false,"evaluation_changed":false},
+  "result":"PASS",
+  "promotion_effect":"eligible for ERL registry CONFORMING promotion; local evaluation authority remains NONE"
+}
