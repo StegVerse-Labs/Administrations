@@ -1,0 +1,28 @@
+{
+  "schema": "stegverse.erl.research_conformance.v1",
+  "repository": "StegVerse-Labs/Administrations",
+  "role": "domain-acquisition-surface",
+  "canonical_owner": "StegVerse-Labs/Executive_Rhetoric_Ledger#60",
+  "evaluation_authority": "StegVerse-Labs/Executive_Rhetoric_Ledger",
+  "acquisition_authority": "local-public-source-discovery",
+  "adapter": "scripts/search_agent.py",
+  "frontier": "research/frontier.json",
+  "recurrence": {
+    "classification": "REQUIRED",
+    "owner": "StegVerse-Labs/Administrations",
+    "cadence_default": "weekly",
+    "basis": "active administration/current-state trajectories and future public records",
+    "stop_condition": "all relevant trajectories SATURATED/SUPERSEDED or recurrence explicitly DELEGATED"
+  },
+  "scheduled_ingest": {
+    "classification": "transport",
+    "paths": [".github/workflows/weekly-ingest-case-threads.yml", "Administrations/.github/workflows/weekly-ingest-admins.yml"],
+    "note": "Existing schedules are ingest/transport and do not by themselves satisfy ERL recurring-search requirements."
+  },
+  "candidate_posture": "lead-only/context-only until ERL review",
+  "native_records_mutation_by_erl_sidecar": false,
+  "github_token_authority": "NONE",
+  "credential_authority": "TV/TVC where applicable",
+  "validation_state": "PENDING_VALIDATION",
+  "next_action": "run deterministic populated fixture, validate ERL intake/transport, then promote registry to CONFORMING"
+}
