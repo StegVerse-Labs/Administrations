@@ -24,15 +24,24 @@
 - `research/acquisition_requests.jsonl`
 - `research/source_candidates.jsonl`
 - `research/research_receipts.jsonl`
+- `research/conformance.json`
 - `data/sources/sources_whitelist.csv`
 - `scripts/search_agent.py`
 - upstream: `StegVerse-Labs/Executive_Rhetoric_Ledger/standards/multi-trajectory-research-surface.v1.md`
 
+## Research posture
+- recurrence: REQUIRED while relevant trajectories remain OPEN/ACTIVE and can receive future evidence
+- default cadence: weekly; trajectory evidence volatility may raise/lower cadence
+- existing weekly workflows: classified as transport/ingest, not sufficient by themselves as ERL research monitors
+- all plausible trajectories must be searched; contradictory/null/new trajectories are preserved
+- local candidates remain lead-only/context-only until ERL review
+
 ## Completed work
 - Canonical mirror handoff installed at `a95cedf06ca6c3b318cb2ac6e1590bd10bebfc81`.
 - Full research surface installed at `824aa5463febf9cffe846f9d4625801bb23e9659`.
+- Conformance/recurrence profile installed at `6635e03b83631eaada166643cd2923a365bf702f`.
 - Adapter is executable, searches only configured sources, reads all ACTIVE trajectories/requests, emits lead-only candidates and append-only receipts, and performs no local conclusion promotion.
-- Empty-frontier/empty-whitelist dry-run of the installed adapter logic returned zero requests, zero sources, zero candidates without mutation.
+- Empty-frontier/empty-whitelist dry-run returned zero requests, zero sources, zero candidates without mutation.
 
 ## Remaining work
 1. Deterministic populated fixture proving trajectory linkage, candidate emission, null receipt, and deduplication.
@@ -48,8 +57,8 @@
 - reviewed publication may flow to Site only after ERL review
 
 ## Completion accounting
-- developed-files: 8/8 = 100%
+- developed-files: 9/9 = 100%
 - scaffolding/stubs: 0
 - validation: 1/3
 - integration: 1/2
-- goal-activation: 70%
+- goal-activation: 72%
