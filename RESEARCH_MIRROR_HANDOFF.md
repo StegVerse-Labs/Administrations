@@ -15,7 +15,7 @@
 - state: CLAIMED_FOR_VALIDATION
 - claimant: current repository validation lane
 - created_at: 2026-08-11T15:34:00Z
-- release_condition: deterministic fixture validation and ERL registry promotion
+- release_condition: deterministic populated fixture + ERL intake validation + registry promotion
 - collision_boundary: do not replace native administration records, ingest semantics, or ERL evaluation authority
 
 ## Installed authoritative files
@@ -27,30 +27,31 @@
 - `research/conformance.json`
 - `data/sources/sources_whitelist.csv`
 - `scripts/search_agent.py`
-- upstream: `StegVerse-Labs/Executive_Rhetoric_Ledger/standards/multi-trajectory-research-surface.v1.md`
+- upstream standard: `StegVerse-Labs/Executive_Rhetoric_Ledger/standards/multi-trajectory-research-surface.v1.md`
+- upstream transport contract: `StegVerse-Labs/Executive_Rhetoric_Ledger/contracts/research-candidate-transport.v1.md`
 
 ## Research posture
 - recurrence: REQUIRED while relevant trajectories remain OPEN/ACTIVE and can receive future evidence
 - default cadence: weekly; trajectory evidence volatility may raise/lower cadence
-- existing weekly workflows: classified as transport/ingest, not sufficient by themselves as ERL research monitors
+- existing weekly workflows: transport/ingest, not sufficient by themselves as ERL research monitors
 - all plausible trajectories must be searched; contradictory/null/new trajectories are preserved
 - local candidates remain lead-only/context-only until ERL review
 
 ## Completed work
-- Canonical mirror handoff installed at `a95cedf06ca6c3b318cb2ac6e1590bd10bebfc81`.
-- Full research surface installed at `824aa5463febf9cffe846f9d4625801bb23e9659`.
-- Conformance/recurrence profile installed at `6635e03b83631eaada166643cd2923a365bf702f`.
-- Adapter is executable, searches only configured sources, reads all ACTIVE trajectories/requests, emits lead-only candidates and append-only receipts, and performs no local conclusion promotion.
-- Empty-frontier/empty-whitelist dry-run returned zero requests, zero sources, zero candidates without mutation.
+- research surface installed at `824aa5463febf9cffe846f9d4625801bb23e9659`;
+- conformance/recurrence profile installed at `6635e03b83631eaada166643cd2923a365bf702f`;
+- candidate adapter aligned at `06c29f41dcfdc984888fd7b1694fd8239a70aa36` to emit `stegverse.erl.research_source_candidate.v1`, full repository identity, uppercase verification state, no native/evaluation mutation, destination ERL, authority effect NONE, credential authority TV/TVC, and GitHub token authority NONE;
+- empty-frontier/empty-whitelist dry-run previously returned zero requests, zero sources, zero candidates without mutation.
 
 ## Remaining work
 1. Deterministic populated fixture proving trajectory linkage, candidate emission, null receipt, and deduplication.
-2. ERL-compatible transport/intake validation.
-3. Promote `coordination/research-surface-registry.v1.json` entry to CONFORMING only after validation evidence.
+2. Run emitted packet through ERL `scripts/validate_research_candidate_intake.py`.
+3. Promote registry entry to CONFORMING only after validation evidence.
 
 ## Validation
 - `python scripts/search_agent.py --base . --dry-run`
 - `python <ERL>/scripts/validate_research_surface.py .`
+- `python <ERL>/scripts/validate_research_candidate_intake.py research/source_candidates.jsonl`
 
 ## Integration
 - local acquisition only; ERL remains evaluation authority
@@ -60,5 +61,5 @@
 - developed-files: 9/9 = 100%
 - scaffolding/stubs: 0
 - validation: 1/3
-- integration: 1/2
-- goal-activation: 72%
+- integration: 2/3
+- goal-activation: 78%
