@@ -8,17 +8,17 @@
 - canonical_owner: StegVerse-Labs/Executive_Rhetoric_Ledger Issue #60
 - local_role: institutional executive-administration source discovery and candidate production
 - evaluation_authority: StegVerse-Labs/Executive_Rhetoric_Ledger
-- credential_authority: TV/TVC where credentials are applicable
+- credential_authority: TV/TVC where applicable
 - github_token_authority: NONE
 
 ## Claim
-- state: CLAIMED_FOR_IMPLEMENTATION
-- claimant: current repository implementation lane
+- state: CLAIMED_FOR_VALIDATION
+- claimant: current repository validation lane
 - created_at: 2026-08-11T15:34:00Z
-- release_condition: common research surface files installed, statically validated, and registry state promoted from PENDING_ADMISSION
+- release_condition: deterministic fixture validation and ERL registry promotion
 - collision_boundary: do not replace native administration records, ingest semantics, or ERL evaluation authority
 
-## Authoritative files
+## Installed authoritative files
 - `research/README.md`
 - `research/frontier.json`
 - `research/acquisition_requests.jsonl`
@@ -26,29 +26,30 @@
 - `research/research_receipts.jsonl`
 - `data/sources/sources_whitelist.csv`
 - `scripts/search_agent.py`
-- upstream standard: `StegVerse-Labs/Executive_Rhetoric_Ledger/standards/multi-trajectory-research-surface.v1.md`
+- upstream: `StegVerse-Labs/Executive_Rhetoric_Ledger/standards/multi-trajectory-research-surface.v1.md`
 
-## Incomplete work
-1. Install local files listed above.
-2. Validate executable search adapter against an empty and a populated trajectory request.
-3. Add ERL-compatible candidate export/transport without granting local evaluation authority.
-4. Promote repository registry state to CONFORMING only after evidence exists.
+## Completed work
+- Canonical mirror handoff installed at `a95cedf06ca6c3b318cb2ac6e1590bd10bebfc81`.
+- Full research surface installed at `824aa5463febf9cffe846f9d4625801bb23e9659`.
+- Adapter is executable, searches only configured sources, reads all ACTIVE trajectories/requests, emits lead-only candidates and append-only receipts, and performs no local conclusion promotion.
+- Empty-frontier/empty-whitelist dry-run of the installed adapter logic returned zero requests, zero sources, zero candidates without mutation.
+
+## Remaining work
+1. Deterministic populated fixture proving trajectory linkage, candidate emission, null receipt, and deduplication.
+2. ERL-compatible transport/intake validation.
+3. Promote `coordination/research-surface-registry.v1.json` entry to CONFORMING only after validation evidence.
 
 ## Validation
 - `python scripts/search_agent.py --base . --dry-run`
-- JSON parse `research/frontier.json`
-- JSONL parse all append-only research ledgers
+- `python <ERL>/scripts/validate_research_surface.py .`
 
-## Cross-repository dependencies
-- source/evaluation authority: StegVerse-Labs/Executive_Rhetoric_Ledger Issue #60
-- shared credential governance: TV/TVC
-- reviewed publication may later flow to Site only after ERL review
-
-## Archive condition
-This handoff is archive-safe only after local research acquisition is installed and the ERL registry reflects its actual state.
+## Integration
+- local acquisition only; ERL remains evaluation authority
+- reviewed publication may flow to Site only after ERL review
 
 ## Completion accounting
-- developed-files: 1/8
-- validation: 0/3
-- integration: 0/2
-- goal-activation: 10%
+- developed-files: 8/8 = 100%
+- scaffolding/stubs: 0
+- validation: 1/3
+- integration: 1/2
+- goal-activation: 70%
