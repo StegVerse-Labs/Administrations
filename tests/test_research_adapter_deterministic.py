@@ -5,6 +5,8 @@ from unittest import mock
 ROOT=pathlib.Path(__file__).resolve().parents[1]; ADAPTER=ROOT/'scripts'/'search_agent.py'; REPOSITORY='StegVerse-Labs/Administrations'
 class FakeResponse:
     def __init__(self,body:bytes): self._body=body; self.headers={'Content-Type':'text/html'}
+    def __enter__(self): return self
+    def __exit__(self,exc_type,exc,tb): return False
     def read(self,_limit=-1): return self._body
 def load_adapter():
     spec=importlib.util.spec_from_file_location('research_agent',ADAPTER); module=importlib.util.module_from_spec(spec); assert spec and spec.loader; spec.loader.exec_module(module); return module
